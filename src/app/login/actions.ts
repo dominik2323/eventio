@@ -1,10 +1,11 @@
 'use server'
 
 import { actionClient } from '@/lib/safe-action'
-import { storeRefreshToken, storeUserData } from '@/lib/session'
+import { clearSession, storeRefreshToken, storeUserData } from '@/lib/session'
 import { eventio } from '@/server'
 import { loginSchema } from '@/server/auth/schema'
 import { UserData } from '@/server/auth/types'
+import { redirect } from 'next/navigation'
 
 export const loginAction = actionClient
   .inputSchema(loginSchema)
@@ -25,3 +26,8 @@ export const loginAction = actionClient
       userData,
     }
   })
+
+export const logoutAction = actionClient.action(async () => {
+  await clearSession()
+  redirect('/login')
+})
