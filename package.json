@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "jest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prettier": "prettier --write ."
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,8 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@eslint/eslintrc": "^3.3.1",
     "@strv/prettier-config": "^3.0.0",
     "@types/react": "19.2.0",

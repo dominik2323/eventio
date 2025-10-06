@@ -1,5 +1,6 @@
 {
-  "*.{js,jsx,ts,tsx}": ["pnpm lint --fix", "prettier --write"],
+  "src/**/*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+  "*.{js,jsx,ts,tsx}": ["prettier --write"],
   "*.{css,scss}": ["prettier --write"],
   "*.{json,md}": ["prettier --write"]
 }
