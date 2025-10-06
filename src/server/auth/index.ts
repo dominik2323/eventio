@@ -1,25 +1,7 @@
 import { env } from '@/env'
 import AuthError from '@/server/auth/error'
 import { LoginSchema, loginSchema } from '@/server/auth/schema'
-
-interface UserData {
-  id: string
-  firstName: string
-  lastName: string
-  email: string
-  createdAt: string
-  updatedAt: string
-}
-
-interface LoginError {
-  message: string
-  code: string
-  issues: {
-    message: string
-  }[]
-}
-
-type UserRes = UserData | LoginError
+import { UserRes } from '@/server/auth/types'
 
 async function login(payload: LoginSchema) {
   const data = loginSchema.parse(payload)
