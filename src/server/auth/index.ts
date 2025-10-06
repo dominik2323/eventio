@@ -21,7 +21,14 @@ async function login(payload: LoginSchema) {
     throw new AuthError(userData.message)
   }
 
-  return userData
+  const accessToken = userRes.headers.get('access-token')
+  const refreshToken = userRes.headers.get('refresh-token')
+
+  return {
+    userData,
+    accessToken,
+    refreshToken,
+  }
 }
 
 export const auth = { login }
