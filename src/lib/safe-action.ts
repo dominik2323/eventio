@@ -1,9 +1,10 @@
+import strings from '@/dictionaries/en'
 import AuthError from '@/server/auth/error'
 import {
   createSafeActionClient,
   DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action'
-import z, { ZodError } from 'zod'
+import { ZodError } from 'zod'
 
 export const actionClient = createSafeActionClient({
   handleServerError,
@@ -11,19 +12,20 @@ export const actionClient = createSafeActionClient({
 
 function handleServerError(error: Error) {
   if (error instanceof AuthError) {
-    console.log('auth error', error)
+    console.error('Authentication error:', error)
     return error.message
   }
 
   if (error instanceof ZodError) {
-    console.log('zod error', z.treeifyError(error))
-    return z.treeifyError(error)
+    console.error('Validation error', error)
+    return strings.errors.validation
   }
 
   if (error instanceof Error) {
-    console.log('error', error.message)
+    console.error('Server error:', error)
     return error.message
   }
 
+  console.error('Unknown error occurred', error)
   return DEFAULT_SERVER_ERROR_MESSAGE
 }
