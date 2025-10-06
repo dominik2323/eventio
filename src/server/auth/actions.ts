@@ -21,6 +21,8 @@ export const loginAction = actionClient
       await storeUserData(userData as UserData)
     }
 
+    redirect('/dashboard')
+
     return {
       accessToken,
       userData,
