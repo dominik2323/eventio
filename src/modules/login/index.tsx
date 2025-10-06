@@ -1,6 +1,6 @@
 'use client'
 
-import { loginAction } from '@/app/login/actions'
+import { loginAction } from '@/server/auth/actions'
 
 function Login() {
   async function handleSubmit(formData: FormData) {
