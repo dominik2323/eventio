@@ -1,4 +1,5 @@
 import strings from '@/dictionaries/en'
+import { getSession } from '@/lib/session'
 import AuthError from '@/server/auth/error'
 import {
   createSafeActionClient,
@@ -29,3 +30,13 @@ function handleServerError(error: Error) {
   console.error('Unknown error occurred', error)
   return DEFAULT_SERVER_ERROR_MESSAGE
 }
+
+export const authActionClient = actionClient.use(async ({ next }) => {
+  const session = await getSession()
+
+  if (!session) {
+    throw new AuthError('User is not authenticated.')
+  }
+
+  return next({ ctx: session.user })
+})
