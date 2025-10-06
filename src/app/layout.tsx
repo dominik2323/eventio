@@ -1,12 +1,12 @@
-import { Metadata } from "next";
-import React from "react";
+import { Metadata } from 'next'
+import React from 'react'
 
 export const metadata: Metadata = {
-  title: "a",
-};
+  title: 'a',
+}
 
 interface PageProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 function RootLayout({ children }: PageProps) {
@@ -14,7 +14,7 @@ function RootLayout({ children }: PageProps) {
     <html lang="en">
       <body>{children}</body>
     </html>
-  );
+  )
 }
 
-export default RootLayout;
+export default RootLayout
