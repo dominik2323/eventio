@@ -14,7 +14,7 @@ const compat = new FlatCompat({
 
 export default defineConfig([
   {
-    ignores: ["node_modules", ".next", "prettierrc.js", "next-env.d.ts"],
+    ignores: ["node_modules", ".next", ".prettierrc.js", "next-env.d.ts"],
     extends: compat.extends("next/core-web-vitals", "next/typescript"),
   },
 ]);
