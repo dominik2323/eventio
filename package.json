@@ -18,9 +18,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.13.8",
     "next": "^15.5.4",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
