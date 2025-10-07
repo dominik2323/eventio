@@ -1,3 +1,5 @@
+import { getUserData } from '@/lib/session'
+import { AuthProvider } from '@/providers/AuthProvider'
 import { Metadata } from 'next'
 import React from 'react'
 
@@ -9,10 +11,14 @@ interface PageProps {
   children: React.ReactNode
 }
 
-function RootLayout({ children }: PageProps) {
+async function RootLayout({ children }: PageProps) {
+  const session = await getUserData()
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <AuthProvider userData={session ? session : null}>
+        <body>{children}</body>
+      </AuthProvider>
     </html>
   )
 }

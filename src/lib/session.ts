@@ -3,9 +3,13 @@ import { UserData } from '@/server/auth/types'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 
-export interface SessionData {
-  refreshToken?: string
+export interface SessionUserData {
+  accessToken?: string
   user?: UserData
+}
+
+export interface SessionData extends SessionUserData {
+  refreshToken?: string
 }
 
 export const sessionOptions = {
@@ -33,6 +37,12 @@ export async function storeRefreshToken(refreshToken: string) {
   await session.save()
 }
 
+export async function storeAccessToken(accessToken: string) {
+  const session = await getSession()
+  session.accessToken = accessToken
+  await session.save()
+}
+
 export async function storeUserData(user: UserData) {
   const session = await getSession()
   session.user = user
@@ -44,7 +54,9 @@ export async function getRefreshToken(): Promise<string | undefined> {
   return session.refreshToken
 }
 
-export async function getUserData(): Promise<UserData | undefined> {
+export async function getUserData(): Promise<
+  Omit<SessionData, 'refreshToken'> | undefined
+> {
   const session = await getSession()
-  return session.user
+  return { user: session.user, accessToken: session.accessToken }
 }

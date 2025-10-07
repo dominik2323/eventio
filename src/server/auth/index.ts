@@ -3,6 +3,7 @@ import AuthError from '@/server/auth/error'
 import { LoginSchema, loginSchema } from '@/server/auth/schema'
 import { LoginError, UserRes } from '@/server/auth/types'
 import { eventioClient } from '@/server/client'
+import 'server-only'
 
 async function login(payload: LoginSchema) {
   const data = loginSchema.parse(payload)
@@ -34,7 +35,7 @@ async function getAccessToken() {
 
   const accessToken = userRes.res.headers.get('access-token')
 
-  return { accessToken }
+  return { accessToken, userData: userRes.data }
 }
 
 export const auth = { login, getAccessToken }
