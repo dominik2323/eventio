@@ -1,14 +1,20 @@
 'use client'
 
 import { useAuth } from '@/providers/AuthProvider'
-import { logoutAction } from '@/server/auth/actions'
 
 function Dashboard() {
-  const { userData } = useAuth()
+  const { userData, logout, authFetch } = useAuth()
+
+  async function handleFetch() {
+    const res = await authFetch('/api/events')
+    console.log(res)
+  }
+
   return (
     <div>
       <pre>{JSON.stringify(userData, null, 2)}</pre>
-      <button onClick={async () => await logoutAction()}>logout</button>
+      <button onClick={logout}>logout</button>
+      <button onClick={handleFetch}>fetch</button>
     </div>
   )
 }

@@ -23,12 +23,21 @@ export const loginAction = actionClient
     if ('id' in userData) await storeUserData(userData as UserData)
 
     redirect('/dashboard')
-
-    return {
-      accessToken,
-      userData,
-    }
   })
+
+export const refreshSessionAction = actionClient.action(async () => {
+  try {
+    const { userData, accessToken } = await eventio.auth.getAccessToken()
+
+    if (accessToken) await storeAccessToken(accessToken)
+    if ('id' in userData) await storeUserData(userData as UserData)
+
+    return { success: true, userData, accessToken }
+  } catch {
+    await clearSession()
+    return { success: false, error: 'Failed to refresh session' }
+  }
+})
 
 export const logoutAction = actionClient.action(async () => {
   await clearSession()

@@ -7,7 +7,9 @@ import 'server-only'
 
 async function login(payload: LoginSchema) {
   const data = loginSchema.parse(payload)
-  const userRes = await eventioClient<UserRes>('/auth/sign-in', data)
+  const userRes = await eventioClient<UserRes>('/auth/sign-in', {
+    body: JSON.stringify(data),
+  })
 
   if (!userRes.ok) {
     throw new AuthError((userRes.data as LoginError).message)
@@ -26,7 +28,7 @@ async function login(payload: LoginSchema) {
 async function getAccessToken() {
   const refreshToken = await getRefreshToken()
   const userRes = await eventioClient<UserRes>('/auth/refresh', {
-    refreshToken,
+    body: JSON.stringify({ refreshToken }),
   })
 
   if (!userRes.ok) {

@@ -8,7 +8,6 @@ function Login() {
     const password = formData.get('password') as string
 
     const res = await loginAction({ email, password })
-    console.log(res.serverError, res)
   }
 
   return (
