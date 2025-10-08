@@ -1,5 +1,6 @@
 import { getSession } from '@/lib/session'
 import AuthError from '@/server/auth/error'
+import EventError from '@/server/events/error'
 import {
   createSafeActionClient,
   DEFAULT_SERVER_ERROR_MESSAGE,
@@ -14,6 +15,11 @@ function handleServerError(error: Error) {
   if (error instanceof AuthError) {
     console.error('Authentication error:', error)
     return 'Oops! That email and pasword combination is not valid.'
+  }
+
+  if (error instanceof EventError) {
+    console.error('Event error:', error)
+    return 'Something went wrong with the event operation.'
   }
 
   if (error instanceof ZodError) {
