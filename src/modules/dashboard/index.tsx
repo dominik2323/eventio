@@ -22,6 +22,7 @@ function updateEvents(currentEvents: EventData[], newEvent: EventData) {
 function Dashboard({ initialEvents }: DashboardProps) {
   const { userData, logout } = useAuth()
   const [events, setEvents] = useState<EventData[]>(initialEvents)
+  const [error, setError] = useState<string | undefined>(undefined)
 
   const { execute: executeJoin, isExecuting: isJoining } = useAction(
     joinEventAction,
@@ -29,8 +30,8 @@ function Dashboard({ initialEvents }: DashboardProps) {
       onSuccess({ data: newEvent }) {
         setEvents((prevEvents) => updateEvents(prevEvents, newEvent))
       },
-      onError(args) {
-        console.log(args)
+      onError({ error: { serverError } }) {
+        setError(serverError)
       },
     }
   )
@@ -41,17 +42,19 @@ function Dashboard({ initialEvents }: DashboardProps) {
       onSuccess({ data: newEvent }) {
         setEvents((prevEvents) => updateEvents(prevEvents, newEvent))
       },
-      onError(args) {
-        console.log(args)
+      onError({ error: { serverError } }) {
+        setError(serverError)
       },
     }
   )
 
   function handleLeaveEvent(id: string) {
+    setError(undefined)
     executeLeave(id)
   }
 
   function handleJoinEvent(id: string) {
+    setError(undefined)
     executeJoin(id)
   }
 
@@ -62,17 +65,19 @@ function Dashboard({ initialEvents }: DashboardProps) {
       <pre>{JSON.stringify(userData, null, 2)}</pre>
       <button onClick={logout}>logout</button>
       {isLoading && <div>loading</div>}
+      {error && <div>{error}</div>}
 
       <div>
         {events?.map((event) => {
           const isAttendant = event.attendees.some(
             (person) => person.id === userData?.id
           )
+          // TODO check if the event is in the past
 
           return (
             <div key={event.id}>
               <h2>{event.title}</h2>
-              <span>{event.id}</span>
+              <span>owner: {event.owner.firstName}</span>
               <span>
                 {event.attendees.map((person) => (
                   <div key={person.id}>

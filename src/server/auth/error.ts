@@ -1,6 +1,6 @@
 export default class AuthError extends Error {
   constructor(message: string) {
-    super(`AuthError: ${message}`)
+    super(message)
     this.name = 'AuthError'
   }
 }

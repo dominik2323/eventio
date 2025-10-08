@@ -1,6 +1,6 @@
 export default class EventError extends Error {
   constructor(message: string) {
-    super(`EventError: ${message}`)
+    super(message)
     this.name = 'EventError'
   }
 }
