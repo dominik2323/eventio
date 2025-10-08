@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-  title: 'a',
+  title: 'Eventio',
 }
 
 interface PageProps {
@@ -16,13 +16,7 @@ async function RootLayout({ children }: PageProps) {
 
   return (
     <html lang="en">
-      <AuthProvider
-        initialUserData={
-          session
-            ? { accessToken: session.accessToken, user: session.user }
-            : null
-        }
-      >
+      <AuthProvider initialUserData={session ?? null}>
         <body>{children}</body>
       </AuthProvider>
     </html>
