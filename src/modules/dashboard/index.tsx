@@ -1,54 +1,67 @@
 'use client'
 
 import { useAuth } from '@/providers/AuthProvider'
-import {
-  createEventAction,
-  deleteEventAction,
-  joinEventAction,
-  leaveEventAction,
-} from '@/server/events/actions'
+import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
+import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 
-type Event = EventData[] | null
-
 interface DashboardProps {
-  initialEvents: Event
+  initialEvents: EventData[]
+}
+
+function updateEvents(currentEvents: EventData[], newEvent: EventData) {
+  const replaceIndex = currentEvents?.findIndex((e) => e.id === newEvent.id)
+  if (replaceIndex === -1) return currentEvents
+
+  return currentEvents.map((event, index) =>
+    index === replaceIndex ? newEvent : event
+  )
 }
 
 function Dashboard({ initialEvents }: DashboardProps) {
   const { userData, logout } = useAuth()
-  const [events, setEvents] = useState<Event>(initialEvents)
+  const [events, setEvents] = useState<EventData[]>(initialEvents)
 
-  async function handleCreateEvent() {
-    const result = await createEventAction({
-      title: 'Test',
-      capacity: 10,
-      description: 'Test test',
-      startsAt: '2026-10-03T09:34:07.206Z',
-    })
-    console.log(result)
+  const { execute: executeJoin, isExecuting: isJoining } = useAction(
+    joinEventAction,
+    {
+      onSuccess({ data: newEvent }) {
+        setEvents((prevEvents) => updateEvents(prevEvents, newEvent))
+      },
+      onError(args) {
+        console.log(args)
+      },
+    }
+  )
+
+  const { execute: executeLeave, isExecuting: isLeaving } = useAction(
+    leaveEventAction,
+    {
+      onSuccess({ data: newEvent }) {
+        setEvents((prevEvents) => updateEvents(prevEvents, newEvent))
+      },
+      onError(args) {
+        console.log(args)
+      },
+    }
+  )
+
+  function handleLeaveEvent(id: string) {
+    executeLeave(id)
   }
 
-  async function handleDeleteEvent(id: string) {
-    const result = await deleteEventAction(id)
-    console.log('deleted', id, result)
+  function handleJoinEvent(id: string) {
+    executeJoin(id)
   }
 
-  async function handleLeaveEvent(id: string) {
-    const result = await leaveEventAction(id)
-    console.log('left', id, result)
-  }
-
-  async function handleJoinEvent(id: string) {
-    const result = await joinEventAction(id)
-    console.log('join', id, result)
-  }
+  const isLoading = isJoining || isLeaving
 
   return (
     <div>
       <pre>{JSON.stringify(userData, null, 2)}</pre>
       <button onClick={logout}>logout</button>
+      {isLoading && <div>loading</div>}
 
       <div>
         {events?.map((event) => {
@@ -67,9 +80,7 @@ function Dashboard({ initialEvents }: DashboardProps) {
                   </div>
                 ))}
               </span>
-              <button onClick={() => handleDeleteEvent(event.id)}>
-                delete
-              </button>
+
               {isAttendant && (
                 <button onClick={() => handleLeaveEvent(event.id)}>
                   leave
@@ -83,9 +94,19 @@ function Dashboard({ initialEvents }: DashboardProps) {
         })}
       </div>
 
-      <button onClick={handleCreateEvent}>create event</button>
+      {/* <button onClick={handleCreateEvent}>create event</button> */}
     </div>
   )
 }
 
 export default Dashboard
+
+// async function handleCreateEvent() {
+//   const result = await createEventAction({
+//     title: 'Test',
+//     capacity: 10,
+//     description: 'Test test',
+//     startsAt: '2026-10-03T09:34:07.206Z',
+//   })
+//   console.log(result)
+// }
