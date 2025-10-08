@@ -10,15 +10,6 @@ interface DashboardProps {
   initialEvents: EventData[]
 }
 
-function updateEvents(currentEvents: EventData[], newEvent: EventData) {
-  const replaceIndex = currentEvents?.findIndex((e) => e.id === newEvent.id)
-  if (replaceIndex === -1) return currentEvents
-
-  return currentEvents.map((event, index) =>
-    index === replaceIndex ? newEvent : event
-  )
-}
-
 function Dashboard({ initialEvents }: DashboardProps) {
   const { userData, logout } = useAuth()
   const [events, setEvents] = useState<EventData[]>(initialEvents)
