@@ -2,6 +2,7 @@
   "name": "Eventio",
   "version": "1.0.0",
   "description": "Eventio is an application for managing events.",
+  "main": "index.js",
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"

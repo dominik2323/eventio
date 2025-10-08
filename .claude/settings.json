@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm dev)",
+      "Bash(pnpm build)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm test)",
+      "Bash(pnpm prettier)",
+      "Bash(git status)",
+      "Bash(git diff)",
+      "Bash(git log)",
+      "Bash(npx eslint:*)",
+      "Read(src/**)",
+      "Read(*.md)",
+      "Read(*.json)",
+      "Read(*.ts)",
+      "Read(*.tsx)",
+      "Read(*.js)",
+      "Read(*.mjs)",
+      "WebFetch(domain:nextjs.org)",
+      "WebFetch(domain:react.dev)",
+      "WebFetch(domain:docs.claude.com)"
+    ],
+    "deny": [
+      "Read(./.env*)",
+      "Write(./.env*)",
+      "Edit(./.env*)",
+      "Bash(rm:*)",
+      "Bash(rmdir:*)",
+      "Bash(sudo:*)"
+    ],
+    "ask": [
+      "Write(package.json)",
+      "Edit(package.json)",
+      "Write(tsconfig.json)",
+      "Edit(tsconfig.json)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(npm install:*)",
+      "git commit:*"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_PROJECT_TYPE": "nextjs",
+    "CLAUDE_CODE_FRAMEWORK": "nextjs-15"
+  }
+}
