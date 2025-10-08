@@ -16,7 +16,13 @@ async function RootLayout({ children }: PageProps) {
 
   return (
     <html lang="en">
-      <AuthProvider initialUserData={session ? session : null}>
+      <AuthProvider
+        initialUserData={
+          session
+            ? { accessToken: session.accessToken, user: session.user }
+            : null
+        }
+      >
         <body>{children}</body>
       </AuthProvider>
     </html>

@@ -1,18 +1,26 @@
 'use client'
 
-import { loginAction } from '@/server/auth/actions'
+import { useAuth } from '@/providers/AuthProvider'
+import { FormEvent } from 'react'
 
 function Login() {
-  async function handleSubmit(formData: FormData) {
+  const { login, loginError, isLoading } = useAuth()
+  console.log(isLoading)
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    const res = await loginAction({ email, password })
+    await login({ email, password })
   }
 
   return (
     <div>
-      <form action={handleSubmit}>
+      {loginError && <span>{loginError}</span>}
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email:</label>
           <input type="email" id="email" name="email" required />
@@ -21,7 +29,9 @@ function Login() {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
         </div>
-        <button type="submit">Log in</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Log in'}
+        </button>
       </form>
     </div>
   )

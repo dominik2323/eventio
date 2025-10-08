@@ -10,7 +10,6 @@ import {
 import { eventio } from '@/server'
 import { loginSchema } from '@/server/auth/schema'
 import { UserData } from '@/server/auth/types'
-import { redirect } from 'next/navigation'
 
 export const loginAction = actionClient
   .inputSchema(loginSchema)
@@ -22,24 +21,18 @@ export const loginAction = actionClient
     if (accessToken) await storeAccessToken(accessToken)
     if ('id' in userData) await storeUserData(userData as UserData)
 
-    redirect('/dashboard')
+    return { userData, accessToken }
   })
 
 export const refreshSessionAction = actionClient.action(async () => {
-  try {
-    const { userData, accessToken } = await eventio.auth.getAccessToken()
+  const { userData, accessToken } = await eventio.auth.getAccessToken()
 
-    if (accessToken) await storeAccessToken(accessToken)
-    if ('id' in userData) await storeUserData(userData as UserData)
+  if (accessToken) await storeAccessToken(accessToken)
+  if ('id' in userData) await storeUserData(userData as UserData)
 
-    return { success: true, userData, accessToken }
-  } catch {
-    await clearSession()
-    return { success: false, error: 'Failed to refresh session' }
-  }
+  return { userData, accessToken }
 })
 
 export const logoutAction = actionClient.action(async () => {
   await clearSession()
-  redirect('/login')
 })

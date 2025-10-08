@@ -2,7 +2,13 @@
 
 import { SessionUserData } from '@/lib/session'
 import { authUtils } from '@/providers/AuthProvider/utils'
-import { logoutAction, refreshSessionAction } from '@/server/auth/actions'
+import {
+  loginAction,
+  logoutAction,
+  refreshSessionAction,
+} from '@/server/auth/actions'
+import { LoginSchema } from '@/server/auth/schema'
+import { useRouter } from 'next/navigation'
 import { createContext, ReactNode, useContext, useState } from 'react'
 
 type UserData = SessionUserData | null
@@ -16,6 +22,8 @@ interface AuthContextType {
   userData: UserData
   isLoading: boolean
   logout: () => Promise<void>
+  login: (input: LoginSchema) => Promise<void>
+  loginError: string | null
   authFetch: (path: string, options?: RequestInit) => Promise<unknown>
 }
 
@@ -24,6 +32,8 @@ const AuthContext = createContext<AuthContextType>(null!)
 export function AuthProvider({ children, initialUserData }: AuthProviderProps) {
   const [userData, setUserData] = useState<UserData>(initialUserData)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
+  const router = useRouter()
 
   const authFetch = async (
     path: string,
@@ -33,7 +43,7 @@ export function AuthProvider({ children, initialUserData }: AuthProviderProps) {
     try {
       setIsLoading(true)
       // prettier-ignore
-      return await authUtils.makeRequest(path,  userData?.accessToken, options)
+      return await authUtils.makeRequest(path, userData?.accessToken, options)
     } catch (e: unknown) {
       if (e instanceof Error && e.message.includes('401')) {
         // If this is already a retry attempt, logout to prevent infinite loops
@@ -62,22 +72,56 @@ export function AuthProvider({ children, initialUserData }: AuthProviderProps) {
     }
   }
 
-  const logout = async () => {
+  const login = async (input: LoginSchema) => {
+    setIsLoading(true)
+
     try {
-      setIsLoading(true)
-      setUserData(null)
-      await logoutAction()
+      setLoginError(null)
+      const { data, serverError, validationErrors } = await loginAction(input)
+
+      if (serverError) throw new Error(serverError)
+      if (validationErrors) throw new Error(validationErrors?._errors?.[0])
+
+      if (data?.accessToken && data.userData && 'id' in data.userData) {
+        setUserData({
+          accessToken: data?.accessToken,
+          user: data.userData,
+        })
+        router.push('/dashboard')
+      } else {
+        throw new Error('Unable to fetch user data.')
+      }
     } catch (e) {
-      console.error('Logout failed:', e)
+      if (e instanceof Error) {
+        setLoginError(e.message)
+      } else {
+        setLoginError('Login failed.')
+      }
+      console.log('Login failed:', e)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const value = {
+  const logout = async () => {
+    try {
+      setIsLoading(true)
+      await logoutAction()
+      router.push('/login')
+      setUserData(null)
+    } catch (e) {
+      console.log('Logout failed:', e)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const value: AuthContextType = {
     isLoading,
     userData,
     logout,
+    login,
+    loginError,
     authFetch,
   }
 

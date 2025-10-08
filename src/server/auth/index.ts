@@ -1,7 +1,7 @@
 import { getRefreshToken } from '@/lib/session'
 import AuthError from '@/server/auth/error'
 import { LoginSchema, loginSchema } from '@/server/auth/schema'
-import { LoginError, UserRes } from '@/server/auth/types'
+import { UserRes } from '@/server/auth/types'
 import { eventioClient } from '@/server/client'
 import 'server-only'
 
@@ -11,8 +11,8 @@ async function login(payload: LoginSchema) {
     body: JSON.stringify(data),
   })
 
-  if (!userRes.ok) {
-    throw new AuthError((userRes.data as LoginError).message)
+  if ('message' in userRes.data && !userRes.ok) {
+    throw new AuthError(userRes.data.message)
   }
 
   const accessToken = userRes.res.headers.get('access-token')
@@ -31,8 +31,8 @@ async function getAccessToken() {
     body: JSON.stringify({ refreshToken }),
   })
 
-  if (!userRes.ok) {
-    throw new AuthError((userRes.data as LoginError).message)
+  if ('message' in userRes.data && !userRes.ok) {
+    throw new AuthError(userRes.data.message)
   }
 
   const accessToken = userRes.res.headers.get('access-token')

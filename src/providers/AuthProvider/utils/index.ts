@@ -7,7 +7,6 @@ const makeRequest = async (
     Authorization: `Bearer ${accessToken}`,
     ...options.headers,
   }
-  console.log(headers)
 
   const res = await fetch(path, {
     ...options,
