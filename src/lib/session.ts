@@ -1,3 +1,5 @@
+'use server'
+
 import { env } from '@/env'
 import { UserData } from '@/server/auth/types'
 import { getIronSession } from 'iron-session'
@@ -5,10 +7,11 @@ import { cookies } from 'next/headers'
 
 export interface SessionData {
   refreshToken?: string
+  accessToken?: string
   user?: UserData
 }
 
-export const sessionOptions = {
+const sessionOptions = {
   password: env.SESSION_SECRET,
   cookieName: 'eventio-session',
   cookieOptions: {
@@ -33,6 +36,12 @@ export async function storeRefreshToken(refreshToken: string) {
   await session.save()
 }
 
+export async function storeAccessToken(accessToken: string) {
+  const session = await getSession()
+  session.accessToken = accessToken
+  await session.save()
+}
+
 export async function storeUserData(user: UserData) {
   const session = await getSession()
   session.user = user
@@ -47,4 +56,9 @@ export async function getRefreshToken(): Promise<string | undefined> {
 export async function getUserData(): Promise<UserData | undefined> {
   const session = await getSession()
   return session.user
+}
+
+export async function getAccessToken(): Promise<string | undefined> {
+  const session = await getSession()
+  return session.accessToken
 }

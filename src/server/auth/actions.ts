@@ -1,11 +1,15 @@
 'use server'
 
 import { actionClient } from '@/lib/safe-action'
-import { clearSession, storeRefreshToken, storeUserData } from '@/lib/session'
+import {
+  clearSession,
+  storeAccessToken,
+  storeRefreshToken,
+  storeUserData,
+} from '@/lib/session'
 import { eventio } from '@/server'
 import { loginSchema } from '@/server/auth/schema'
 import { UserData } from '@/server/auth/types'
-import { redirect } from 'next/navigation'
 
 export const loginAction = actionClient
   .inputSchema(loginSchema)
@@ -13,23 +17,22 @@ export const loginAction = actionClient
     const { userData, accessToken, refreshToken } =
       await eventio.auth.login(parsedInput)
 
-    if (refreshToken) {
-      await storeRefreshToken(refreshToken)
-    }
+    if (refreshToken) await storeRefreshToken(refreshToken)
+    if (accessToken) await storeAccessToken(accessToken)
+    if ('id' in userData) await storeUserData(userData as UserData)
 
-    if ('id' in userData) {
-      await storeUserData(userData as UserData)
-    }
-
-    redirect('/dashboard')
-
-    return {
-      accessToken,
-      userData,
-    }
+    return { userData, accessToken }
   })
+
+export const refreshSessionAction = actionClient.action(async () => {
+  const { userData, accessToken } = await eventio.auth.getAccessToken()
+
+  if (accessToken) await storeAccessToken(accessToken)
+  if ('id' in userData) await storeUserData(userData as UserData)
+
+  return { userData, accessToken }
+})
 
 export const logoutAction = actionClient.action(async () => {
   await clearSession()
-  redirect('/login')
 })

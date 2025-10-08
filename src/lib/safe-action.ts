@@ -1,4 +1,3 @@
-import strings from '@/dictionaries/en'
 import { getSession } from '@/lib/session'
 import AuthError from '@/server/auth/error'
 import {
@@ -14,17 +13,17 @@ export const actionClient = createSafeActionClient({
 function handleServerError(error: Error) {
   if (error instanceof AuthError) {
     console.error('Authentication error:', error)
-    return error.message
+    return 'Oops! That email and pasword combination is not valid.'
   }
 
   if (error instanceof ZodError) {
     console.error('Validation error', error)
-    return strings.errors.validation
+    return 'Validation failed. Please check your input.'
   }
 
   if (error instanceof Error) {
-    console.error('Server error:', error)
-    return error.message
+    console.error('Generic error:', error)
+    return 'Something went wrong.'
   }
 
   console.error('Unknown error occurred', error)
@@ -35,7 +34,7 @@ export const authActionClient = actionClient.use(async ({ next }) => {
   const session = await getSession()
 
   if (!session) {
-    throw new AuthError('User is not authenticated.')
+    throw new Error('User is not authenticated.')
   }
 
   return next({ ctx: session.user })

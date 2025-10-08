@@ -1,18 +1,24 @@
+import { getUserData } from '@/lib/session'
+import { AuthProvider } from '@/providers/AuthProvider'
 import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-  title: 'a',
+  title: 'Eventio',
 }
 
 interface PageProps {
   children: React.ReactNode
 }
 
-function RootLayout({ children }: PageProps) {
+async function RootLayout({ children }: PageProps) {
+  const session = await getUserData()
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <AuthProvider initialUserData={session ?? null}>
+        <body>{children}</body>
+      </AuthProvider>
     </html>
   )
 }
