@@ -27,3 +27,11 @@ export interface EventError {
 
 export type EventRes = EventData | EventError
 export type EventsRes = EventData[] | EventError
+
+export function isEventError(data: EventRes): data is EventError {
+  return 'message' in data
+}
+
+export function isEventsError(data: EventsRes): data is EventError {
+  return 'message' in data && !Array.isArray(data)
+}

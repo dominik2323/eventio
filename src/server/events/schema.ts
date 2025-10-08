@@ -7,7 +7,7 @@ export const createEventSchema = z.object({
   capacity: z.number().min(1),
 })
 
-export const eventIdSchema = z.string().uuid()
+export const eventIdSchema = z.string().min(1)
 
 export type CreateEventSchema = z.infer<typeof createEventSchema>
 export type EventIdSchema = z.infer<typeof eventIdSchema>

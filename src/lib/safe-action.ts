@@ -14,12 +14,12 @@ export const actionClient = createSafeActionClient({
 function handleServerError(error: Error) {
   if (error instanceof AuthError) {
     console.error('Authentication error:', error)
-    return 'Oops! That email and pasword combination is not valid.'
+    return error.message
   }
 
   if (error instanceof EventError) {
     console.error('Event error:', error)
-    return 'Something went wrong with the event operation.'
+    return error.message
   }
 
   if (error instanceof ZodError) {

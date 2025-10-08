@@ -1,4 +1,5 @@
 import { getAccessToken } from '@/lib/session'
+import { eventioAuthClient, eventioClient } from '@/server/client'
 import EventError from '@/server/events/error'
 import {
   CreateEventSchema,
@@ -6,23 +7,28 @@ import {
   createEventSchema,
   eventIdSchema,
 } from '@/server/events/schema'
-import { EventRes, EventsRes } from '@/server/events/types'
-import { eventioClient } from '@/server/client'
+import {
+  EventData,
+  EventRes,
+  EventsRes,
+  isEventError,
+  isEventsError,
+} from '@/server/events/types'
 import 'server-only'
 
-async function getEvents() {
+async function getEvents(): Promise<EventData[]> {
   const eventsRes = await eventioClient<EventsRes>('/events', {
     method: 'GET',
   })
 
-  if ('message' in eventsRes.data && !eventsRes.ok) {
+  if (isEventsError(eventsRes.data) && !eventsRes.ok) {
     throw new EventError(eventsRes.data.message)
   }
 
-  return eventsRes.data
+  return eventsRes.data as EventData[]
 }
 
-async function createEvent(payload: CreateEventSchema) {
+async function createEvent(payload: CreateEventSchema): Promise<EventData> {
   const data = createEventSchema.parse(payload)
   const accessToken = await getAccessToken()
 
@@ -30,7 +36,7 @@ async function createEvent(payload: CreateEventSchema) {
     throw new EventError('Access token required')
   }
 
-  const eventRes = await eventioClient<EventRes>('/events', {
+  const eventRes = await eventioAuthClient<EventRes>('/events', {
     method: 'POST',
     body: JSON.stringify(data),
     headers: {
@@ -38,14 +44,14 @@ async function createEvent(payload: CreateEventSchema) {
     },
   })
 
-  if ('message' in eventRes.data && !eventRes.ok) {
+  if (isEventError(eventRes.data) && !eventRes.ok) {
     throw new EventError(eventRes.data.message)
   }
 
-  return eventRes.data
+  return eventRes.data as EventData
 }
 
-async function joinEvent(eventId: EventIdSchema) {
+async function joinEvent(eventId: EventIdSchema): Promise<EventData> {
   const id = eventIdSchema.parse(eventId)
   const accessToken = await getAccessToken()
 
@@ -53,21 +59,24 @@ async function joinEvent(eventId: EventIdSchema) {
     throw new EventError('Access token required')
   }
 
-  const eventRes = await eventioClient<EventRes>(`/events/${id}/attendees/me`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
+  const eventRes = await eventioAuthClient<EventRes>(
+    `/events/${id}/attendees/me`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  )
 
-  if ('message' in eventRes.data && !eventRes.ok) {
+  if (isEventError(eventRes.data) && !eventRes.ok) {
     throw new EventError(eventRes.data.message)
   }
 
-  return eventRes.data
+  return eventRes.data as EventData
 }
 
-async function leaveEvent(eventId: EventIdSchema) {
+async function leaveEvent(eventId: EventIdSchema): Promise<EventData> {
   const id = eventIdSchema.parse(eventId)
   const accessToken = await getAccessToken()
 
@@ -75,18 +84,49 @@ async function leaveEvent(eventId: EventIdSchema) {
     throw new EventError('Access token required')
   }
 
-  const eventRes = await eventioClient<EventRes>(`/events/${id}/attendees/me`, {
+  const eventRes = await eventioAuthClient<EventRes>(
+    `/events/${id}/attendees/me`,
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  )
+
+  if (isEventError(eventRes.data) && !eventRes.ok) {
+    throw new EventError(eventRes.data.message)
+  }
+
+  return eventRes.data as EventData
+}
+
+async function deleteEvent(eventId: EventIdSchema): Promise<EventData> {
+  const id = eventIdSchema.parse(eventId)
+  const accessToken = await getAccessToken()
+
+  if (!accessToken) {
+    throw new EventError('Access token required')
+  }
+
+  const eventRes = await eventioAuthClient<EventRes>(`/events/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   })
 
-  if ('message' in eventRes.data && !eventRes.ok) {
+  if (isEventError(eventRes.data) && !eventRes.ok) {
     throw new EventError(eventRes.data.message)
   }
 
-  return eventRes.data
+  return eventRes.data as EventData
 }
 
-export const events = { getEvents, createEvent, joinEvent, leaveEvent }
+export const events = {
+  getEvents,
+  createEvent,
+  joinEvent,
+  leaveEvent,
+  deleteEvent,
+}
