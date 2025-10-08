@@ -3,16 +3,9 @@
 import { useAuth } from '@/providers/AuthProvider'
 
 function Dashboard() {
-  const { userData, logout, authFetch } = useAuth()
+  const { userData, logout } = useAuth()
 
-  async function handleFetch() {
-    try {
-      const res = await authFetch('/api/events')
-      console.log(res)
-    } catch (e) {
-      console.log('e', e)
-    }
-  }
+  async function handleFetch() {}
 
   return (
     <div>
