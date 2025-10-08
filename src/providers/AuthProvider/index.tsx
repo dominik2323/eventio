@@ -26,7 +26,7 @@ interface AuthContextType {
 
 const makeRequest = async (
   path: string,
-  accessToken: string,
+  accessToken?: string,
   options: RequestInit = {}
 ) => {
   const res = await fetch(path, {
@@ -54,40 +54,28 @@ export function AuthProvider({ children, initialUserData }: AuthProviderProps) {
 
   const authFetch = async (path: string, options: RequestInit = {}) => {
     try {
-      if (!userData?.accessToken) {
-        await logout()
-        throw new Error('No access token available')
-      }
-
       setIsLoading(true)
-      const result = await makeRequest(path, userData.accessToken, options)
-      setIsLoading(false)
-      return result
+      const res = await makeRequest(path, userData?.accessToken, options)
+      return res
     } catch (e: unknown) {
-      console.log(e)
-
-      setIsLoading(false)
-
       if (e instanceof Error && e.message.includes('401')) {
         try {
           const { data } = await refreshSessionAction()
           if (data?.accessToken && data?.userData && 'id' in data.userData) {
             setUserData({ accessToken: data.accessToken, user: data.userData })
-            const result = await makeRequest(path, data.accessToken, options)
-            return result
+            return await makeRequest(path, data.accessToken, options)
           } else {
             await logout()
-            throw new Error('Failed to refresh session')
           }
-        } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError)
+        } catch (e) {
+          console.error('Token refresh failed:', e)
           await logout()
-          throw refreshError
         }
       }
 
-      console.error('Auth fetch error:', e)
       throw e
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -98,6 +86,7 @@ export function AuthProvider({ children, initialUserData }: AuthProviderProps) {
       await logoutAction()
     } catch (e) {
       console.error('Logout failed:', e)
+    } finally {
       setIsLoading(false)
     }
   }

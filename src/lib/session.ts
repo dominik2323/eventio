@@ -1,3 +1,5 @@
+'use server'
+
 import { env } from '@/env'
 import { UserData } from '@/server/auth/types'
 import { getIronSession } from 'iron-session'
