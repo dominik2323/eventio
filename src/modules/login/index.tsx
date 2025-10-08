@@ -5,7 +5,6 @@ import { FormEvent } from 'react'
 
 function Login() {
   const { login, loginError, isLoading } = useAuth()
-  console.log(isLoading)
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()

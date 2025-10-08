@@ -1,8 +1,10 @@
 'use client'
 
+import { updateEvents } from '@/modules/dashboard/utils'
 import { useAuth } from '@/providers/AuthProvider'
 import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
+import { compareAsc } from 'date-fns'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 
@@ -63,11 +65,12 @@ function Dashboard({ initialEvents }: DashboardProps) {
           const isAttendant = event.attendees.some(
             (person) => person.id === userData?.id
           )
-          // TODO check if the event is in the past
+          const isInPast = compareAsc(event.startsAt, new Date()) < 1
 
           return (
             <div key={event.id}>
               <h2>{event.title}</h2>
+
               <span>owner: {event.owner.firstName}</span>
               <span>
                 {event.attendees.map((person) => (
@@ -78,12 +81,20 @@ function Dashboard({ initialEvents }: DashboardProps) {
               </span>
 
               {isAttendant && (
-                <button onClick={() => handleLeaveEvent(event.id)}>
+                <button
+                  onClick={() => handleLeaveEvent(event.id)}
+                  disabled={isInPast}
+                >
                   leave
                 </button>
               )}
               {!isAttendant && (
-                <button onClick={() => handleJoinEvent(event.id)}>join</button>
+                <button
+                  onClick={() => handleJoinEvent(event.id)}
+                  disabled={isInPast}
+                >
+                  join
+                </button>
               )}
             </div>
           )
