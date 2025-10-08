@@ -14,7 +14,7 @@ export interface SessionData extends SessionUserData {
   refreshToken?: string
 }
 
-export const sessionOptions = {
+const sessionOptions = {
   password: env.SESSION_SECRET,
   cookieName: 'eventio-session',
   cookieOptions: {

@@ -6,8 +6,12 @@ function Dashboard() {
   const { userData, logout, authFetch } = useAuth()
 
   async function handleFetch() {
-    const res = await authFetch('/api/events')
-    console.log(res)
+    try {
+      const res = await authFetch('/api/events')
+      console.log(res)
+    } catch (e) {
+      console.log('e', e)
+    }
   }
 
   return (
