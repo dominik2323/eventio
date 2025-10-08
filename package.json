@@ -1,8 +1,11 @@
 {
-  "name": "eventio",
+  "name": "Eventio",
   "version": "1.0.0",
   "description": "Eventio is an application for managing events.",
-  "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -14,8 +17,11 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Eventio",
+    "events"
+  ],
+  "author": "Dominik Tomcik",
   "license": "ISC",
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.8",
