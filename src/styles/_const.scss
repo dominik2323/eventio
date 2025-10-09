@@ -6,9 +6,11 @@ $easing-map: (
 );
 
 $radius-map: (
-  --radius-1: map.get($spaces-map, --space-2),
+  --radius-100: map.get($spaces-map, --space-200),
+  --radius-200: map.get($spaces-map, --space-400),
 );
 
 $z-index-map: (
   --z-index-navigation: 900,
+  --z-popover: 1000,
 );
