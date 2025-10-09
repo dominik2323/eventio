@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@400;500&family=Playfair:wght@400&display=swap');
+
+/* Define CSS variables to match Next.js font generation */
+:root {
+  --font-hindi: 'Hind', sans-serif;
+  --font-playfair: 'Playfair', serif;
+}
+
+html,
+html body,
+body,
+#storybook-root,
+#storybook-root *,
+.sb-show-main {
+  font-family: 'Hind', sans-serif;
+}
+
+html {
+  font-family: var(--font-hindi);
+}
+
+body {
+  font-family: var(--font-hindi);
+}

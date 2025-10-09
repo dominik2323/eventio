@@ -1,0 +1,53 @@
+.button {
+  all: unset;
+  cursor: pointer;
+  display: block;
+  text-transform: uppercase;
+  border-radius: var(--space-200);
+  color: var(--text-500);
+  text-align: center;
+  line-height: 1;
+  transition: background-color 0.2s var(--easing);
+  font-weight: 500;
+
+  &.sm {
+    min-width: 10rem;
+    height: 3.2rem;
+    padding: 0 var(--space-300);
+    .spinner {
+      max-width: 2.1rem;
+    }
+  }
+
+  &.lg {
+    min-width: 24rem;
+    height: 5.7rem;
+    padding: 0 var(--space-300);
+    .spinner {
+      max-width: 3.2rem;
+    }
+  }
+
+  &.primary {
+    background-color: var(--area-green-100);
+    &:hover {
+      background-color: var(--area-green-300);
+    }
+  }
+
+  &.danger {
+    background-color: var(--area-red-100);
+    &:hover {
+      background-color: var(--area-red-200);
+    }
+  }
+
+  &.disabled,
+  &[disabled] {
+    cursor: default;
+    background-color: var(--area-200);
+    &:hover {
+      background-color: var(--area-300);
+    }
+  }
+}

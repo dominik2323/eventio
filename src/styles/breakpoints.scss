@@ -1,0 +1,85 @@
+@use 'sass:map';
+
+$breakpoints: (
+  smallMobile: 20em,
+  mobile: 23.5em,
+  tablet: 48em,
+  largeTablet: 64em,
+  laptop: 80em,
+  mediumLaptop: 90em,
+  largeLaptop: 105em,
+  desktop: 120em,
+  largeDesktop: 160em,
+) !default;
+
+@mixin custom($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin smallPhone {
+  @media (min-width: map.get($breakpoints, 'smallMobile')) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media (min-width: map.get($breakpoints, 'mobile')) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: map.get($breakpoints, 'tablet')) {
+    @content;
+  }
+}
+
+@mixin largeTablet {
+  @media (min-width: map.get($breakpoints, 'largeTablet')) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (min-width: map.get($breakpoints, 'laptop')) {
+    @content;
+  }
+}
+
+@mixin mediumLaptop {
+  @media (min-width: map.get($breakpoints, 'mediumLaptop')) {
+    @content;
+  }
+}
+
+@mixin largeLaptop {
+  @media (min-width: map.get($breakpoints, 'largeLaptop')) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: map.get($breakpoints, 'desktop')) {
+    @content;
+  }
+}
+
+@mixin largeDesktop {
+  @media (min-width: map.get($breakpoints, 'largeDesktop')) {
+    @content;
+  }
+}
+
+@mixin touch {
+  @media (hover: none) and (pointer: coarse) {
+    @content;
+  }
+}
+
+@mixin burgerDown {
+  @include largeTablet {
+    @content;
+  }
+}
