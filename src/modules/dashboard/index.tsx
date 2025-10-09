@@ -1,11 +1,11 @@
 'use client'
 
-import { updateEvents } from '@/modules/dashboard/utils'
+import CreateEvent from '@/modules/create-event'
 import { useAuth } from '@/providers/AuthProvider'
 import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
 import { compareAsc } from 'date-fns'
-import { useAction } from 'next-safe-action/hooks'
+import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 
 interface DashboardProps {
@@ -14,32 +14,55 @@ interface DashboardProps {
 
 function Dashboard({ initialEvents }: DashboardProps) {
   const { userData, logout } = useAuth()
-  const [events, setEvents] = useState<EventData[]>(initialEvents)
   const [error, setError] = useState<string | undefined>(undefined)
 
-  const { execute: executeJoin, isExecuting: isJoining } = useAction(
-    joinEventAction,
-    {
-      onSuccess({ data: newEvent }) {
-        setEvents((prevEvents) => updateEvents(prevEvents, newEvent))
-      },
-      onError({ error: { serverError } }) {
-        setError(serverError)
-      },
-    }
-  )
+  const {
+    execute: executeJoin,
+    isExecuting: isJoining,
+    optimisticState: joinOptimisticEvents,
+  } = useOptimisticAction(joinEventAction, {
+    currentState: initialEvents,
+    updateFn(state, eventId) {
+      if (!userData) return state
+      return state.map((event) =>
+        event.id === eventId
+          ? {
+              ...event,
+              attendees: [...event.attendees, userData],
+            }
+          : event
+      )
+    },
+    onError({ error: { serverError } }) {
+      setError(serverError)
+    },
+  })
 
-  const { execute: executeLeave, isExecuting: isLeaving } = useAction(
-    leaveEventAction,
-    {
-      onSuccess({ data: newEvent }) {
-        setEvents((prevEvents) => updateEvents(prevEvents, newEvent))
-      },
-      onError({ error: { serverError } }) {
-        setError(serverError)
-      },
-    }
-  )
+  const {
+    execute: executeLeave,
+    isExecuting: isLeaving,
+    optimisticState: leaveOptimisticEvents,
+  } = useOptimisticAction(leaveEventAction, {
+    currentState: joinOptimisticEvents,
+    updateFn(state, eventId) {
+      if (!userData) return state
+      return state.map((event) =>
+        event.id === eventId
+          ? {
+              ...event,
+              attendees: event.attendees.filter(
+                (attendee) => attendee.id !== userData.id
+              ),
+            }
+          : event
+      )
+    },
+    onError({ error: { serverError } }) {
+      setError(serverError)
+    },
+  })
+
+  const events = leaveOptimisticEvents
 
   function handleLeaveEvent(id: string) {
     setError(undefined)
@@ -101,19 +124,9 @@ function Dashboard({ initialEvents }: DashboardProps) {
         })}
       </div>
 
-      {/* <button onClick={handleCreateEvent}>create event</button> */}
+      <CreateEvent />
     </div>
   )
 }
 
 export default Dashboard
-
-// async function handleCreateEvent() {
-//   const result = await createEventAction({
-//     title: 'Test',
-//     capacity: 10,
-//     description: 'Test test',
-//     startsAt: '2026-10-03T09:34:07.206Z',
-//   })
-//   console.log(result)
-// }

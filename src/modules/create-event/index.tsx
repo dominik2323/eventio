@@ -1,20 +1,21 @@
 'use client'
 
-import { useAuth } from '@/providers/AuthProvider'
+import { createEventAction } from '@/server/events/actions'
+import { useAction } from 'next-safe-action/hooks'
 import { FormEvent } from 'react'
 
 function CreateEvent() {
-  const { login, isExecuting } = useAuth()
-  console.log(isExecuting)
+  const { execute } = useAction(createEventAction)
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-
-    login({ email, password })
+    execute({
+      title: 'Test 10',
+      capacity: 10,
+      description: 'Test test',
+      startsAt: '2026-10-03T09:34:07.206Z',
+    })
   }
 
   return (
