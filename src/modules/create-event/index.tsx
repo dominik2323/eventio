@@ -4,17 +4,17 @@ import { useAuth } from '@/providers/AuthProvider'
 import { FormEvent } from 'react'
 
 function CreateEvent() {
-  const { login, loginError, isLoading } = useAuth()
-  console.log(isLoading)
+  const { login, isExecuting } = useAuth()
+  console.log(isExecuting)
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    await login({ email, password })
+    login({ email, password })
   }
 
   return (
