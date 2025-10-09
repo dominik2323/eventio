@@ -1,0 +1,19 @@
+@use '../styles/colors' as *;
+
+$theme-map: (
+  --background-100: $gray-100,
+  --area-100: $white,
+  --area-green-100: $green-100,
+  --area-green-200: $green-200,
+  --area-green-300: $green-300,
+  --area-red-100: $red-100,
+  --area-red-200: $red-200,
+  --border-100: $gray-1100,
+  --border-red-100: $red-100,
+  --text-red-100: $red-100,
+  --text-500: $gray-1100,
+  --text-400: $gray-900,
+  --text-300: $gray-800,
+  --text-200: $gray-700,
+  --text-100: $gray-400,
+);

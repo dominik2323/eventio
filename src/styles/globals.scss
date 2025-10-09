@@ -1,0 +1,69 @@
+@use './_theme.scss' as *;
+@use './typography.scss' as *;
+@use './mixins.scss' as *;
+@use './_spacing.scss' as *;
+@use './_const.scss' as *;
+@use './breakpoints.scss' as *;
+@use './_colors.scss' as *;
+@use './_theme.scss' as *;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  @include spread-map($color-map);
+  @include spread-map($theme-map);
+  @include spread-map($spaces-map);
+  @include spread-map($radius-map);
+  @include spread-map($font-sizes-map);
+  @include spread-map($z-index-map);
+  @include spread-map($easing-map);
+}
+
+html {
+  font-size: 62.5%;
+  font-family: var(--font-hindi);
+  color: var(--text-500);
+}
+
+body {
+  @include xSmall;
+}
+
+img,
+svg {
+  display: block;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+.small {
+  @include xSmall;
+}
+
+.xsmall {
+  @include xxSmall;
+}
+
+.medium {
+  @include medium;
+}
+
+.large {
+  @include xLarge;
+}
+
+.xlarge {
+  @include xxLarge;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

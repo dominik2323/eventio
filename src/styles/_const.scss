@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use './_spacing.scss' as *;
+
+$easing-map: (
+  --easing: cubic-bezier(0, 0.8, 0.515, 1.005),
+);
+
+$radius-map: (
+  --radius-1: map.get($spaces-map, --space-2),
+);
+
+$z-index-map: (
+  --z-index-navigation: 900,
+);
