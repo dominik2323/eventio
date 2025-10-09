@@ -16,10 +16,7 @@ export const createEventSchema = z.object({
     .min(1, 'Event start date and time is required')
     .datetime('Please enter a valid date and time'),
   capacity: z
-    .number({
-      required_error: 'Event capacity is required',
-      invalid_type_error: 'Event capacity must be a number',
-    })
+    .number()
     .int('Event capacity must be a whole number')
     .min(1, 'Event capacity must be at least 1')
     .max(1000, 'Event capacity cannot exceed 1000 participants'),

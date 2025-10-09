@@ -24,7 +24,7 @@ function handleServerError(error: Error) {
 
   if (error instanceof ZodError) {
     console.error('Validation error', error)
-    return 'Validation failed. Please check your input.'
+    return 'Please check your inputs.'
   }
 
   if (error instanceof Error) {
