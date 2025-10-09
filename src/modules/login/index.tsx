@@ -1,37 +1,59 @@
 'use client'
 
+import { Button } from '@/components/Button'
+import { Label, TextField } from '@/components/Form'
+import { FormGroup } from '@/components/Form/FormGroup'
 import { useAuth } from '@/providers/AuthProvider'
-import { FormEvent } from 'react'
+import { loginSchema, type LoginSchema } from '@/server/auth/schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
 function Login() {
   const { login, error, isExecuting } = useAuth()
-  console.log(isExecuting)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const form = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
+  })
 
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-
-    login({ email, password })
+  const onSubmit = (data: LoginSchema) => {
+    login(data)
   }
 
   return (
     <div>
       {error && <span>{error}</span>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" required />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-        <button type="submit" disabled={isExecuting}>
-          {isExecuting ? 'Logging in...' : 'Log in'}
-        </button>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormGroup>
+          <Label htmlFor="email" required>
+            Email:
+          </Label>
+          <TextField
+            id="email"
+            type="email"
+            error={form.formState.errors.email?.message}
+            {...form.register('email')}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="password" required>
+            Password:
+          </Label>
+          <TextField
+            id="password"
+            type="password"
+            error={form.formState.errors.password?.message}
+            {...form.register('password')}
+          />
+        </FormGroup>
+        <Button type="submit" disabled={isExecuting} loading={isExecuting}>
+          {'Log in'}
+        </Button>
       </form>
     </div>
   )

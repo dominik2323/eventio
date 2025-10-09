@@ -4,7 +4,7 @@ import CreateEvent from '@/modules/create-event'
 import { useAuth } from '@/providers/AuthProvider'
 import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
-import { compareAsc } from 'date-fns'
+import { compareAsc, format } from 'date-fns'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 
@@ -95,6 +95,7 @@ function Dashboard({ initialEvents }: DashboardProps) {
               <h2>{event.title}</h2>
 
               <span>owner: {event.owner.firstName}</span>
+              <span>date: {format(event.startsAt, 'Pp')}</span>
               <span>
                 {event.attendees.map((person) => (
                   <div key={person.id}>
