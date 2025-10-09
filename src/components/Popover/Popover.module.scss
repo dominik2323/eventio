@@ -1,0 +1,93 @@
+.trigger {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--space-200);
+}
+
+.content {
+  background-color: var(--area-100);
+  border-radius: var(--radius-200);
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.2);
+  padding: var(--space-300);
+  min-width: 15rem;
+  max-width: 30rem;
+  animation-duration: 400ms;
+  animation-timing-function: var(--easing);
+  will-change: transform, opacity;
+  z-index: var(--z-popover);
+
+  &[data-state='open'] {
+    animation-name: slideUpAndFade;
+  }
+
+  &[data-state='closed'] {
+    animation-name: slideDownAndFade;
+  }
+
+  &[data-side='top'] {
+    animation-name: slideDownAndFade;
+  }
+
+  &[data-side='right'] {
+    animation-name: slideLeftAndFade;
+  }
+
+  &[data-side='bottom'] {
+    animation-name: slideUpAndFade;
+  }
+
+  &[data-side='left'] {
+    animation-name: slideRightAndFade;
+  }
+}
+
+.arrow {
+  height: 1.2rem;
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDownAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

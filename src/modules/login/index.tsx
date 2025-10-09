@@ -26,7 +26,7 @@ function Login() {
   }
 
   return (
-    <div>
+    <main>
       {error && <span>{error}</span>}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormGroup>
@@ -55,7 +55,7 @@ function Login() {
           {'Log in'}
         </Button>
       </form>
-    </div>
+    </main>
   )
 }
 

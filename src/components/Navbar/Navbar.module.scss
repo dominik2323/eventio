@@ -1,0 +1,53 @@
+@use '../../styles/typography.scss' as *;
+@use '../../styles/breakpoints.scss' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-navigation);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--navbar-height);
+  padding: 0 var(--space-600);
+  pointer-events: none;
+  @include tablet {
+    padding: 0 var(--space-800);
+  }
+}
+
+.logo {
+  color: var(--text-500);
+  pointer-events: auto;
+  &:visited {
+    color: var(--text-500);
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-400);
+  pointer-events: auto;
+}
+
+.name {
+  display: none;
+  @include tablet {
+    display: block;
+    @include xSmall;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--text-300);
+  }
+}
+
+.chevron {
+  color: var(--area-200);
+  transition: transform 0.2s var(--easing);
+  &.open {
+    transform: rotate(180deg);
+  }
+}
