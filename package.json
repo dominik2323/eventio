@@ -26,6 +26,7 @@
   "license": "ISC",
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.8",
+    "date-fns": "^4.1.0",
     "iron-session": "^8.0.4",
     "next": "^15.5.4",
     "next-safe-action": "^8.0.11",
