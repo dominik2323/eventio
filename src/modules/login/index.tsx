@@ -4,22 +4,22 @@ import { useAuth } from '@/providers/AuthProvider'
 import { FormEvent } from 'react'
 
 function Login() {
-  const { login, loginError, isLoading } = useAuth()
-  console.log(isLoading)
+  const { login, error, isExecuting } = useAuth()
+  console.log(isExecuting)
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
 
-    await login({ email, password })
+    login({ email, password })
   }
 
   return (
     <div>
-      {loginError && <span>{loginError}</span>}
+      {error && <span>{error}</span>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email:</label>
@@ -29,8 +29,8 @@ function Login() {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
         </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Log in'}
+        <button type="submit" disabled={isExecuting}>
+          {isExecuting ? 'Logging in...' : 'Log in'}
         </button>
       </form>
     </div>
