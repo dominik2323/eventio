@@ -5,6 +5,7 @@ import { AuthProvider } from '@/providers/AuthProvider'
 import clsx from 'clsx'
 import { Metadata } from 'next'
 import React from 'react'
+import '../styles/globals.scss'
 
 export const metadata: Metadata = {
   title: 'Eventio',
