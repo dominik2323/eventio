@@ -3,6 +3,7 @@
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Form'
 import { FormGroup } from '@/components/Form/FormGroup'
+import { PasswordField } from '@/components/Form/PasswordField'
 import { useAuth } from '@/providers/AuthProvider'
 import { loginSchema, type LoginSchema } from '@/server/auth/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -43,9 +44,8 @@ function Login() {
             required
             form={form}
           />
-          <TextField
+          <PasswordField
             name="password"
-            type="password"
             label="Password"
             required
             form={form}
