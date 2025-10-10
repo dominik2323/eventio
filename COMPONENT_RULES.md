@@ -9,9 +9,13 @@ This document defines the standards and guidelines for creating components in th
 ```
 src/components/
 ├── ComponentName/
-│   ├── index.tsx          # Main component
-│   ├── ComponentName.module.scss  # Component styles (optional)
-│   └── types.ts           # Component types (if complex)
+│   ├── index.tsx                     # Main component
+│   ├── ComponentName.module.scss     # Component styles (optional)
+│   ├── types.ts                      # Component types (if complex)
+│   └── SubComponentName              # Main component
+│       ├── index.tsx                     # Sub component
+│       ├── SubComponentName.module.scss  # Sub Component styles (optional)
+│       ├── types.ts                      # Sub Component types (if complex)
 ```
 
 ### Naming Conventions
@@ -29,9 +33,11 @@ export { ComponentName } from './ComponentName'
 export type { ComponentNameProps } from './types'
 
 // OR for simple components:
-export function ComponentName(props: ComponentNameProps) {
+function ComponentName(props: ComponentNameProps) {
   // implementation
 }
+
+export { ComponentName }
 ```
 
 ## 2. TypeScript Guidelines
@@ -62,7 +68,7 @@ interface ComponentProps {
   variant?: 'default' | 'alternative'
 }
 
-export function Component({
+function Component({
   children,
   variant = 'default',
   ...props
@@ -73,12 +79,14 @@ export function Component({
     </div>
   )
 }
+
+export { Component }
 ```
 
 #### ForwardRef Component (for form inputs)
 
 ```typescript
-export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
+const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ error, label, ...props }, ref) => {
     return (
       <>
@@ -99,19 +107,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   }
 )
 
-TextField.displayName = 'TextField'
-```
-
-### Type Imports
-
-```typescript
-// Prefer type-only imports
-import type { ButtonHTMLAttributes } from 'react'
-import type { ComponentProps } from './types'
-
-// Regular imports for components and utilities
-import { forwardRef } from 'react'
-import { clsx } from 'clsx'
+export { TextField }
 ```
 
 ## 3. Styling Standards
@@ -155,85 +151,6 @@ margin: $space-200;
 gap: $space-300;
 ```
 
-## 4. Component Categories & Templates
-
-### UI Components (Basic Building Blocks)
-
-- **Purpose**: Reusable interface elements
-- **Location**: `src/components/`
-- **Examples**: Button, TextField, Label, Card
-- **Pattern**: Extend HTML element props, focus on reusability
-
-```typescript
-// Example: Button component
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary'
-  size?: 'sm' | 'md' | 'lg'
-  loading?: boolean
-}
-
-export function Button({
-  children,
-  variant = 'primary',
-  size = 'md',
-  loading = false,
-  disabled,
-  ...props
-}: ButtonProps) {
-  return (
-    <button
-      {...props}
-      disabled={disabled || loading}
-      className={`btn btn--${variant} btn--${size}`}
-    >
-      {loading ? 'Loading...' : children}
-    </button>
-  )
-}
-```
-
-### Form Components
-
-- **Purpose**: Form inputs with validation support
-- **Location**: `src/components/Form/`
-- **Pattern**: Use forwardRef, integrate with React Hook Form
-- **Accessibility**: Include proper ARIA attributes
-
-```typescript
-export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
-  ({ error, required, label, ...props }, ref) => {
-    const fieldId = props.id || generateId()
-
-    return (
-      <div className="form-field">
-        {label && (
-          <Label htmlFor={fieldId} required={required}>
-            {label}
-          </Label>
-        )}
-        <input
-          {...props}
-          ref={ref}
-          id={fieldId}
-          aria-invalid={error ? 'true' : 'false'}
-          aria-describedby={error ? `${fieldId}-error` : undefined}
-          aria-required={required}
-        />
-        {error && (
-          <div
-            id={`${fieldId}-error`}
-            role="alert"
-            className="form-field__error"
-          >
-            {error}
-          </div>
-        )}
-      </div>
-    )
-  }
-)
-```
-
 ### Layout Components
 
 - **Purpose**: Page structure and layout management
@@ -247,61 +164,6 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
 - **Pattern**: Can be more complex, integrate multiple UI components
 
 ## 5. Development Standards
-
-### Client vs Server Components
-
-```typescript
-// Server Component (default)
-export function ServerComponent({ data }: Props) {
-  return <div>{data}</div>
-}
-
-// Client Component (when needed)
-;('use client')
-
-import { useState } from 'react'
-
-export function ClientComponent() {
-  const [state, setState] = useState()
-  // Interactive logic
-}
-```
-
-### Import Conventions
-
-```typescript
-// 1. React and third-party imports
-import { forwardRef } from 'react'
-import { clsx } from 'clsx'
-
-// 2. Type imports
-import type { InputHTMLAttributes } from 'react'
-
-// 3. Local imports (using @/ alias)
-import { Button } from '@/components/Button'
-import type { ComponentProps } from '@/types'
-
-// 4. Relative imports
-import { localUtility } from './utils'
-```
-
-### Error Handling
-
-```typescript
-interface ComponentProps {
-  fallback?: React.ReactNode
-}
-
-export function Component({ fallback = null }: ComponentProps) {
-  try {
-    // Component logic
-    return <div>Content</div>
-  } catch (error) {
-    console.error('Component error:', error)
-    return fallback
-  }
-}
-```
 
 ### Accessibility Requirements
 
@@ -353,27 +215,6 @@ function MyForm() {
 }
 ```
 
-### Server Action Integration
-
-```typescript
-// Component with server action
-import { useAuth } from '@/providers/AuthProvider'
-
-function ActionComponent() {
-  const { login, error, isExecuting } = useAuth()
-
-  return (
-    <Button
-      onClick={() => login(data)}
-      loading={isExecuting}
-      disabled={isExecuting}
-    >
-      Submit
-    </Button>
-  )
-}
-```
-
 ## 7. Testing & Documentation
 
 ### Storybook Stories
@@ -408,43 +249,6 @@ export const Loading: Story = {
 }
 ```
 
-## 8. Performance Guidelines
-
-### Code Splitting
-
-```typescript
-// Lazy load heavy components
-import { lazy, Suspense } from 'react'
-
-const HeavyComponent = lazy(() => import('./HeavyComponent'))
-
-function App() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HeavyComponent />
-    </Suspense>
-  )
-}
-```
-
-### Memoization
-
-```typescript
-import { memo, useMemo, useCallback } from 'react'
-
-const ExpensiveComponent = memo(function ExpensiveComponent({ data }: Props) {
-  const processedData = useMemo(() => {
-    return expensiveProcessing(data)
-  }, [data])
-
-  const handleClick = useCallback(() => {
-    // Handler logic
-  }, [dependency])
-
-  return <div>{processedData}</div>
-})
-```
-
 ## 9. Checklist for New Components
 
 ### Before Creating
@@ -469,53 +273,6 @@ const ExpensiveComponent = memo(function ExpensiveComponent({ data }: Props) {
 - [ ] Document any special usage patterns
 - [ ] Review with team if complex
 - [ ] Ensure it integrates well with existing components
-
-## 10. Common Patterns
-
-### Conditional Rendering
-
-```typescript
-// Use logical operators for simple conditions
-{
-  error && <ErrorMessage>{error}</ErrorMessage>
-}
-
-// Use ternary for if/else
-{
-  loading ? <Spinner /> : <Content />
-}
-
-// Use early returns for complex conditions
-if (!data) {
-  return <EmptyState />
-}
-```
-
-### Props Forwarding
-
-```typescript
-// Spread remaining props to underlying element
-function Component({ customProp, ...props }: Props) {
-  return <div {...props}>{/* Component content */}</div>
-}
-```
-
-### Compound Components
-
-```typescript
-// For related components that work together
-function Form({ children }: FormProps) {
-  return <form>{children}</form>
-}
-
-function FormField({ children }: FormFieldProps) {
-  return <div className="form-field">{children}</div>
-}
-
-Form.Field = FormField
-
-// Usage: <Form><Form.Field>...</Form.Field></Form>
-```
 
 ---
 
