@@ -1,10 +1,6 @@
 @use '@/styles/breakpoints' as *;
 @use '@/styles/typography' as *;
 
-body {
-  background-color: var(--white);
-}
-
 .navbar {
   @include tablet {
     --logo-color: var(--white);
