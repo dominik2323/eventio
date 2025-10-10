@@ -1,4 +1,3 @@
-import { Navbar } from '@/components/Navbar'
 import { hind, playfair } from '@/consts/fonts'
 import { getUserData } from '@/lib/session'
 import { AuthProvider } from '@/providers/AuthProvider'
@@ -21,10 +20,7 @@ async function RootLayout({ children }: PageProps) {
   return (
     <html lang="en" className={clsx(playfair.variable, hind.variable)}>
       <AuthProvider initialUserData={session ?? null}>
-        <body>
-          <Navbar />
-          {children}
-        </body>
+        <body>{children}</body>
       </AuthProvider>
     </html>
   )

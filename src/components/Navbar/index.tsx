@@ -26,11 +26,11 @@ function Navbar({ className }: NavbarProps) {
 
   return (
     <nav className={clsx(styles.navbar, className)}>
-      <Link href="/" className={styles.logo}>
+      <Link href="/" className={clsx(styles.logo)}>
         <EventioLogo />
       </Link>
 
-      {userData && (
+      {userData ? (
         <Popover
           open={open}
           onOpenChange={setOpen}
@@ -45,6 +45,10 @@ function Navbar({ className }: NavbarProps) {
           }
           content={<PopoverItem onClick={handleLogout}>Logout</PopoverItem>}
         />
+      ) : (
+        <p className={styles.signUpLink}>
+          Don&apos;t have account? <Link href="/signup">SIGN UP</Link>
+        </p>
       )}
     </nav>
   )

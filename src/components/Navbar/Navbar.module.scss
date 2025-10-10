@@ -2,6 +2,7 @@
 @use '../../styles/breakpoints.scss' as *;
 
 .navbar {
+  --logo-color: var(--text-500);
   position: fixed;
   top: 0;
   left: 0;
@@ -19,10 +20,10 @@
 }
 
 .logo {
-  color: var(--text-500);
+  color: var(--logo-color);
   pointer-events: auto;
   &:visited {
-    color: var(--text-500);
+    color: var(--logo-color);
   }
 }
 
@@ -49,5 +50,19 @@
   transition: transform 0.2s var(--easing);
   &.open {
     transform: rotate(180deg);
+  }
+}
+
+.signUpLink {
+  margin-top: var(--space-600);
+  text-align: center;
+  color: var(--gray-500);
+  @include xSmall;
+  a {
+    color: var(--gray-800);
+    text-decoration: none;
+    &:hover {
+      color: var(--text-400);
+    }
   }
 }

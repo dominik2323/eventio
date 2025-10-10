@@ -1,9 +1,15 @@
 @use '../../styles/typography.scss' as *;
+@use '../../styles/breakpoints.scss' as *;
 
 .loginContainer {
   max-width: 40rem;
   margin: 0 auto;
   margin-top: var(--space-1200);
+  @include tablet {
+    width: 100%;
+    max-width: 48rem;
+    margin-top: 0;
+  }
 }
 
 .loginHeader {
@@ -16,6 +22,16 @@
     color: var(--gray-800);
     @include xSmall;
   }
+  @include tablet {
+    h1 {
+      @include xLarge;
+      margin-bottom: var(--space-500);
+    }
+    p {
+      @include medium;
+    }
+    text-align: left;
+  }
 }
 
 .loginForm {
@@ -23,10 +39,16 @@
   flex-direction: column;
   align-items: center;
   margin-top: var(--space-850);
+  @include tablet {
+    align-items: flex-start;
+  }
 }
 
 .signInButton {
   margin-top: var(--space-800);
+  @include tablet {
+    margin-top: var(--space-1000);
+  }
 }
 
 .signUpLink {
@@ -40,5 +62,8 @@
     &:hover {
       color: var(--text-400);
     }
+  }
+  @include tablet {
+    display: none;
   }
 }
