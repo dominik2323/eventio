@@ -1,0 +1,7 @@
+@use '../../../styles/typography.scss' as *;
+
+.fieldError {
+  color: var(--red-100);
+  margin-top: var(--space-200);
+  @include medium;
+}

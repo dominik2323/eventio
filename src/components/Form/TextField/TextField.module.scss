@@ -1,0 +1,45 @@
+@use '../../../styles/typography.scss' as *;
+
+.textFieldContainer {
+  position: relative;
+
+  .label {
+    position: absolute;
+    transform: translateY(1.2rem);
+    transform-origin: left top;
+    transition: transform 0.08s ease-in-out;
+    pointer-events: none;
+    &.focused {
+      color: var(--gray-300);
+      transform: translateY(-1.2rem) scale(0.8);
+    }
+  }
+}
+
+.textField {
+  border: none;
+  border-bottom: 1px solid var(--border-100);
+  padding: var(--space-300) 0;
+  width: 100%;
+  transition: border-color 0.2s var(--easing);
+  background-color: transparent;
+  color: var(--text-500);
+  @include medium;
+
+  &.error {
+    border-color: var(--red-100);
+    &:hover {
+      border-color: var(--red-200);
+    }
+  }
+  &:hover {
+    border-color: var(--border-green-200);
+  }
+  &:focus {
+    border-color: var(--border-200);
+  }
+  &:focus-visible {
+    outline: none;
+    border-color: var(--border-200);
+  }
+}

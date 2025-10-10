@@ -1,0 +1,6 @@
+@use '../../../styles/typography.scss' as *;
+
+.label {
+  color: var(--gray-500);
+  @include xSmall;
+}
