@@ -1,0 +1,74 @@
+@use '@/styles/breakpoints' as *;
+@use '@/styles/typography' as *;
+
+.navbar {
+  @include tablet {
+    --logo-color: var(--white);
+  }
+}
+
+.heroLayout {
+  padding: var(--page-margin);
+  @include tablet {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 480px 1fr;
+  }
+}
+
+.cover {
+  display: none;
+  position: relative;
+  @include tablet {
+    display: block;
+    height: 100vh;
+    background-color: var(--gray-1100);
+    padding-bottom: var(--space-1100);
+  }
+}
+
+.coverImage {
+  object-fit: cover;
+  opacity: 0.11;
+}
+
+.quoteContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
+.quote {
+  width: 310px;
+  font-family: var(--font-playfair);
+  @include xxLarge;
+  color: var(--white);
+  text-align: center;
+}
+
+.quoteSeparator {
+  all: unset;
+  display: block;
+  width: 1.2rem;
+  height: 0.2rem;
+  background-color: var(--green-100);
+  margin: var(--space-600) 0;
+}
+
+.quoteAuthor {
+  @include medium;
+  color: var(--gray-800);
+}
+
+.content {
+  @include tablet {
+    display: flex;
+    align-items: center;
+    justify-items: flex-start;
+  }
+}

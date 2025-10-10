@@ -1,0 +1,13 @@
+.popoverItem {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-400) var(--space-500);
+  border-radius: var(--radius-100);
+  transition: background-color 0.2s var(--easing);
+  &:hover {
+    background-color: var(--area-200);
+  }
+}

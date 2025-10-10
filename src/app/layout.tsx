@@ -1,6 +1,7 @@
 import { hind, playfair } from '@/consts/fonts'
 import { getUserData } from '@/lib/session'
 import { AuthProvider } from '@/providers/AuthProvider'
+import clsx from 'clsx'
 import { Metadata } from 'next'
 import React from 'react'
 import '../styles/globals.scss'
@@ -17,7 +18,7 @@ async function RootLayout({ children }: PageProps) {
   const session = await getUserData()
 
   return (
-    <html lang="en" className={`${playfair.variable} ${hind.variable}`}>
+    <html lang="en" className={clsx(playfair.variable, hind.variable)}>
       <AuthProvider initialUserData={session ?? null}>
         <body>{children}</body>
       </AuthProvider>

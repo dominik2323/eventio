@@ -2,10 +2,7 @@ import clsx from 'clsx'
 import type { HTMLAttributes } from 'react'
 import styles from './Spinner.module.scss'
 
-export function Spinner({
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) {
+function Spinner({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       {...props}
@@ -31,3 +28,5 @@ export function Spinner({
     </div>
   )
 }
+
+export { Spinner }

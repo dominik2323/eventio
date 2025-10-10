@@ -21,6 +21,11 @@
   @include spread-map($font-sizes-map);
   @include spread-map($z-index-map);
   @include spread-map($easing-map);
+  --navbar-height: 7rem;
+  --page-margin: var(--space-600);
+  @include tablet {
+    --navbar-height: 8rem;
+  }
 }
 
 html {
@@ -41,6 +46,10 @@ svg {
 ul,
 ol {
   list-style: none;
+}
+
+h1 {
+  font-weight: 400;
 }
 
 .small {

@@ -1,0 +1,27 @@
+@use '../../../styles/typography.scss' as *;
+@use '../../../styles/breakpoints.scss' as *;
+
+.userAvatar {
+  border-radius: 99rem;
+  height: 3.2rem;
+  width: 3.2rem;
+  background-color: var(--area-200);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include tablet {
+    height: 4rem;
+    width: 4rem;
+  }
+}
+
+.initials {
+  @include xxSmall;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-300);
+  @include tablet {
+    @include xSmall;
+  }
+}

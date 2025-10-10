@@ -1,4 +1,5 @@
-import { forwardRef } from 'react'
+import clsx from 'clsx'
+import styles from './Label.module.scss'
 
 export interface LabelProps
   extends React.LabelHTMLAttributes<HTMLLabelElement> {
@@ -6,15 +7,13 @@ export interface LabelProps
   children: React.ReactNode
 }
 
-export const Label = forwardRef<HTMLLabelElement, LabelProps>(
-  ({ required, children, ...props }, ref) => {
-    return (
-      <label {...props} ref={ref}>
-        {children}
-        {required && <span aria-label="required field">*</span>}
-      </label>
-    )
-  }
-)
+function Label({ required, children, ...props }: LabelProps) {
+  return (
+    <label {...props} className={clsx(styles.label, props.className)}>
+      {children}
+      {required && <span aria-label="required field"> *</span>}
+    </label>
+  )
+}
 
-Label.displayName = 'Label'
+export { Label }
