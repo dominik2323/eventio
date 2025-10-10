@@ -67,50 +67,50 @@ function CreateEvent() {
           <Label htmlFor="title">Title:</Label>
           <TextField
             type="text"
-            id="title"
+            label="Title"
+            name="title"
             required
-            error={form.formState.errors.title?.message}
-            {...form.register('title')}
+            form={form}
           />
         </FormGroup>
         <FormGroup>
           <Label htmlFor="description">Description:</Label>
           <TextField
             type="text"
-            id="description"
+            name="description"
+            label="Description"
+            form={form}
             required
-            error={form.formState.errors.description?.message}
-            {...form.register('description')}
           />
         </FormGroup>
         <FormGroup>
           <Label htmlFor="date">Date:</Label>
           <TextField
             type="date"
-            id="date"
+            name="date"
             required
-            error={form.formState.errors.date?.message}
-            {...form.register('date')}
+            label="Date"
+            form={form}
           />
         </FormGroup>
         <FormGroup>
           <Label htmlFor="time">Time:</Label>
           <TextField
             type="time"
-            id="time"
+            name="time"
             required
-            error={form.formState.errors.time?.message}
-            {...form.register('time')}
+            label="Time"
+            form={form}
           />
         </FormGroup>
         <FormGroup>
           <Label htmlFor="capacity">Capacity:</Label>
           <TextField
             type="number"
-            id="capacity"
+            name="capacity"
             required
-            error={form.formState.errors.capacity?.message}
-            {...form.register('capacity')}
+            label="Capacity"
+            form={form}
           />
         </FormGroup>
 

@@ -1,12 +1,14 @@
 'use client'
 
 import { Button } from '@/components/Button'
-import { Label, TextField } from '@/components/Form'
+import { TextField } from '@/components/Form'
 import { FormGroup } from '@/components/Form/FormGroup'
 import { useAuth } from '@/providers/AuthProvider'
 import { loginSchema, type LoginSchema } from '@/server/auth/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import styles from './Login.module.scss'
 
 function Login() {
   const { login, error, isExecuting } = useAuth()
@@ -26,36 +28,43 @@ function Login() {
   }
 
   return (
-    <main>
-      {error && <span>{error}</span>}
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+    <div className={styles.loginContainer}>
+      <div className={styles.loginHeader}>
+        <h1>Sign in to Eventio.</h1>
+        <p>Enter your details below.</p>
+      </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={styles.loginForm}>
+        {error && <span>{error}</span>}
         <FormGroup>
-          <Label htmlFor="email" required>
-            Email:
-          </Label>
           <TextField
-            id="email"
+            name="email"
             type="email"
-            error={form.formState.errors.email?.message}
-            {...form.register('email')}
+            label="Email"
+            required
+            form={form}
           />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="password" required>
-            Password:
-          </Label>
           <TextField
-            id="password"
+            name="password"
             type="password"
-            error={form.formState.errors.password?.message}
-            {...form.register('password')}
+            label="Password"
+            required
+            form={form}
           />
         </FormGroup>
-        <Button type="submit" disabled={isExecuting} loading={isExecuting}>
-          {'Log in'}
+        <p className={styles.signUpLink}>
+          Don&apos;t have account? <Link href="/signup">SIGN UP</Link>
+        </p>
+        <Button
+          type="submit"
+          disabled={isExecuting}
+          loading={isExecuting}
+          size="lg"
+          className={styles.signInButton}
+        >
+          {'Sign in'}
         </Button>
       </form>
-    </main>
+    </div>
   )
 }
 

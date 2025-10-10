@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: space-between;
   height: var(--navbar-height);
-  padding: 0 var(--space-600);
+  padding: 0 var(--page-margin);
   pointer-events: none;
   @include tablet {
     padding: 0 var(--space-800);

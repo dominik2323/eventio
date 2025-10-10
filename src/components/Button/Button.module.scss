@@ -4,8 +4,9 @@
   display: block;
   text-transform: uppercase;
   border-radius: var(--space-200);
-  color: var(--text-500);
+  color: var(--white);
   text-align: center;
+  letter-spacing: 0.1em;
   line-height: 1;
   transition: background-color 0.2s var(--easing);
   font-weight: 500;
@@ -46,6 +47,7 @@
   &[disabled] {
     cursor: default;
     background-color: var(--area-200);
+    color: var(--text-500);
     &:hover {
       background-color: var(--area-300);
     }
