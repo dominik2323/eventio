@@ -21,6 +21,9 @@
   p {
     color: var(--gray-800);
     @include xSmall;
+    &.rootError {
+      color: var(--red-100);
+    }
   }
   @include tablet {
     h1 {

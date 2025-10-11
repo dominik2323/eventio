@@ -32,10 +32,13 @@ function Login() {
     <div className={styles.loginContainer}>
       <div className={styles.loginHeader}>
         <h1>Sign in to Eventio.</h1>
-        <p>Enter your details below.</p>
+        {error ? (
+          <p className={styles.rootError}>{error}</p>
+        ) : (
+          <p>Enter your details below.</p>
+        )}
       </div>
       <form onSubmit={form.handleSubmit(onSubmit)} className={styles.loginForm}>
-        {error && <span>{error}</span>}
         <FormGroup>
           <TextField
             name="email"
