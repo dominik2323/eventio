@@ -1,4 +1,8 @@
-function EventioLogo() {
+interface EventioLogoProps {
+  className?: string
+}
+
+function EventioLogo({ className }: EventioLogoProps) {
   return (
     <svg
       width="23"
@@ -6,6 +10,7 @@ function EventioLogo() {
       viewBox="0 0 23 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         fillRule="evenodd"

@@ -4,7 +4,7 @@
 .loginContainer {
   max-width: 40rem;
   margin: 0 auto;
-  margin-top: var(--space-1200);
+  margin-top: var(--space-1150);
   @include tablet {
     width: 100%;
     max-width: 48rem;
@@ -38,9 +38,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: var(--space-850);
+  margin-top: var(--space-700);
   @include tablet {
     align-items: flex-start;
+    margin-top: var(--space-850);
   }
 }
 

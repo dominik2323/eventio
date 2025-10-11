@@ -25,6 +25,7 @@
   --page-margin: var(--space-600);
   @include tablet {
     --navbar-height: 8rem;
+    --page-margin: var(--space-1000);
   }
 }
 

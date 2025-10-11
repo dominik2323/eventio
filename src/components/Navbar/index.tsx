@@ -27,7 +27,7 @@ function Navbar({ className }: NavbarProps) {
   return (
     <nav className={clsx(styles.navbar, className)}>
       <Link href="/" className={clsx(styles.logo)}>
-        <EventioLogo />
+        <EventioLogo className={styles.logoIcon} />
       </Link>
 
       {userData ? (

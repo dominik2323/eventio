@@ -12,7 +12,10 @@
   @include tablet {
     padding: 0;
     display: grid;
-    grid-template-columns: 480px 1fr;
+    grid-template-columns: 40rem 1fr;
+  }
+  @include desktop {
+    grid-template-columns: 480rem 1fr;
   }
 }
 
@@ -68,6 +71,7 @@
 .content {
   @include tablet {
     display: flex;
+    padding: 0 var(--space-600);
     align-items: center;
     justify-items: flex-start;
   }

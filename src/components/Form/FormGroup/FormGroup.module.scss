@@ -1,5 +1,10 @@
+@use '../../../styles/breakpoints.scss' as *;
+
 .formGroup {
   display: grid;
   width: 100%;
-  row-gap: var(--space-800);
+  row-gap: var(--space-700);
+  @include tablet {
+    row-gap: var(--space-800);
+  }
 }
