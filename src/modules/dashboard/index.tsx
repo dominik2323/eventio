@@ -1,6 +1,5 @@
 'use client'
 
-import CreateEvent from '@/modules/create-event'
 import { useAuth } from '@/providers/AuthProvider'
 import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
@@ -78,8 +77,6 @@ function Dashboard({ initialEvents }: DashboardProps) {
 
   return (
     <div>
-      <pre>{JSON.stringify(userData, null, 2)}</pre>
-      <button onClick={logout}>logout</button>
       {isLoading && <div>loading</div>}
       {error && <div>{error}</div>}
 
@@ -124,8 +121,6 @@ function Dashboard({ initialEvents }: DashboardProps) {
           )
         })}
       </div>
-
-      <CreateEvent />
     </div>
   )
 }

@@ -1,16 +1,12 @@
 import { HeroLayout } from '@/components/Layouts/HeroLayout'
-import React, { Fragment } from 'react'
+import React from 'react'
 
 interface PageProps {
   children: React.ReactNode
 }
 
 async function RootLayout({ children }: PageProps) {
-  return (
-    <Fragment>
-      <HeroLayout>{children}</HeroLayout>
-    </Fragment>
-  )
+  return <HeroLayout>{children}</HeroLayout>
 }
 
 export default RootLayout

@@ -11,7 +11,7 @@ function HeroLayout({ children }: HeroLayoutProps) {
   return (
     <Fragment>
       <Navbar className={styles.navbar} />
-      <div className={styles.heroLayout}>
+      <main className={styles.heroLayout}>
         <div className={styles.cover}>
           <blockquote className={styles.quoteContainer}>
             <h2 className={styles.quote}>
@@ -28,7 +28,7 @@ function HeroLayout({ children }: HeroLayoutProps) {
           />
         </div>
         <div className={styles.content}>{children}</div>
-      </div>
+      </main>
     </Fragment>
   )
 }
