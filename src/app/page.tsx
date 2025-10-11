@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: {
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 }
 
 function Page() {
-  return <main>Hello World</main>
+  redirect('/login')
 }
 
 export default Page
