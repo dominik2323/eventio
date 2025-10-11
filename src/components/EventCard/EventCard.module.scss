@@ -1,0 +1,77 @@
+@use '../../styles/colors' as *;
+@use '../../styles/spacing' as *;
+@use '../../styles/typography' as *;
+
+.card {
+  background-color: var(--area-100);
+  border-radius: var(--space-100);
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.11);
+  padding: var(--space-600);
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  flex: 1;
+}
+
+.date {
+  @include xSmall;
+  color: var(--text-100);
+  margin-bottom: var(--space-300);
+  display: block;
+}
+
+.title {
+  @include large;
+  color: var(--text-500);
+  margin-bottom: var(--space-300);
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.author {
+  @include xSmall;
+  color: var(--text-400);
+  margin-bottom: var(--space-700);
+}
+
+.description {
+  @include small;
+  color: var(--text-300);
+  line-height: 1.5;
+  margin-bottom: var(--space-600);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.attendees {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+}
+
+.attendeeIcon {
+  color: var(--text-300);
+  svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+.attendeeCount {
+  @include xSmall;
+  color: var(--text-300);
+}
+
+.actionButton {
+  min-width: 10rem;
+}

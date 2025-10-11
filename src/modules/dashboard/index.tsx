@@ -1,9 +1,11 @@
 'use client'
 
+import { EventCard } from '@/components/EventCard'
+import { getEventVariant } from '@/modules/dashboard/utils'
 import { useAuth } from '@/providers/AuthProvider'
 import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
-import { compareAsc, format } from 'date-fns'
+import { format } from 'date-fns'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 
@@ -12,7 +14,7 @@ interface DashboardProps {
 }
 
 function Dashboard({ initialEvents }: DashboardProps) {
-  const { userData, logout } = useAuth()
+  const { userData } = useAuth()
   const [error, setError] = useState<string | undefined>(undefined)
 
   const {
@@ -75,49 +77,46 @@ function Dashboard({ initialEvents }: DashboardProps) {
 
   const isLoading = isJoining || isLeaving
 
+  function handleEventAction(event: EventData) {
+    const variant = getEventVariant(event, userData!)
+
+    switch (variant) {
+      case 'join':
+        handleJoinEvent(event.id)
+        break
+      case 'leave':
+        handleLeaveEvent(event.id)
+        break
+      case 'edit':
+        // TODO: Navigate to edit page or open edit modal
+        console.log('Edit event:', event.id)
+        break
+    }
+  }
+
   return (
     <div>
       {isLoading && <div>loading</div>}
       {error && <div>{error}</div>}
 
-      <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.6rem' }}>
         {events?.map((event) => {
-          const isAttendant = event.attendees.some(
-            (person) => person.id === userData?.id
-          )
-          const isInPast = compareAsc(event.startsAt, new Date()) < 1
+          const variant = getEventVariant(event, userData!)
 
           return (
-            <div key={event.id}>
-              <h2>{event.title}</h2>
-
-              <span>owner: {event.owner.firstName}</span>
-              <span>date: {format(event.startsAt, 'Pp')}</span>
-              <span>
-                {event.attendees.map((person) => (
-                  <div key={person.id}>
-                    <span>{person.firstName}</span>
-                  </div>
-                ))}
-              </span>
-
-              {isAttendant && (
-                <button
-                  onClick={() => handleLeaveEvent(event.id)}
-                  disabled={isInPast}
-                >
-                  leave
-                </button>
-              )}
-              {!isAttendant && (
-                <button
-                  onClick={() => handleJoinEvent(event.id)}
-                  disabled={isInPast}
-                >
-                  join
-                </button>
-              )}
-            </div>
+            <EventCard
+              key={event.id}
+              title={event.title}
+              description={event.description}
+              date={format(new Date(event.startsAt), 'MMMM d, yyyy – h:mm aa')}
+              author={`${event.owner.firstName} ${event.owner.lastName}`}
+              attendees={{
+                current: event.attendees.length,
+                capacity: event.capacity,
+              }}
+              variant={variant}
+              onAction={() => handleEventAction(event)}
+            />
           )
         })}
       </div>
