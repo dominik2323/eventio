@@ -5,7 +5,6 @@ import { getEventVariant } from '@/modules/dashboard/utils'
 import { useAuth } from '@/providers/AuthProvider'
 import { joinEventAction, leaveEventAction } from '@/server/events/actions'
 import { EventData } from '@/server/events/types'
-import { format } from 'date-fns'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 
@@ -16,6 +15,7 @@ interface DashboardProps {
 function Dashboard({ initialEvents }: DashboardProps) {
   const { userData } = useAuth()
   const [error, setError] = useState<string | undefined>(undefined)
+  const [layout, setLayout] = useState<'grid' | 'list'>('grid')
 
   const {
     execute: executeJoin,
@@ -99,16 +99,55 @@ function Dashboard({ initialEvents }: DashboardProps) {
       {isLoading && <div>loading</div>}
       {error && <div>{error}</div>}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.6rem' }}>
+      {/* Layout Toggle */}
+      <div
+        style={{
+          marginBottom: '2rem',
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'center',
+        }}
+      >
+        <span>View:</span>
+        <button
+          onClick={() => setLayout('grid')}
+          style={{
+            background: layout === 'grid' ? '#22d486' : '#d9dce1',
+            color: layout === 'grid' ? 'white' : '#a9aeb4',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Grid
+        </button>
+        <button
+          onClick={() => setLayout('list')}
+          style={{
+            background: layout === 'list' ? '#22d486' : '#d9dce1',
+            color: layout === 'list' ? 'white' : '#a9aeb4',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          List
+        </button>
+      </div>
+
+      <div>
         {events?.map((event) => {
           const variant = getEventVariant(event, userData!)
 
           return (
             <EventCard
               key={event.id}
+              layout={layout}
               title={event.title}
               description={event.description}
-              date={format(new Date(event.startsAt), 'MMMM d, yyyy – h:mm aa')}
+              date={event.startsAt}
               author={`${event.owner.firstName} ${event.owner.lastName}`}
               attendees={{
                 current: event.attendees.length,

@@ -1,6 +1,6 @@
-@use '../../styles/colors.scss' as *;
-@use '../../styles/spacing.scss' as *;
-@use '../../styles/typography.scss' as *;
+@use '../../../styles/_colors.scss' as *;
+@use '../../../styles/_spacing.scss' as *;
+@use '../../../styles/typography.scss' as *;
 
 .card {
   background-color: var(--area-100);
