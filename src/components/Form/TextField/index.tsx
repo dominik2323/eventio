@@ -31,6 +31,7 @@ function TextField<TFieldValues extends FieldValues>({
   const isDirty = form.formState.isDirty
   const hasError = !!error
   const isWorking = form.formState.isSubmitting
+  const hasRootError = !!form.formState.errors?.rootError
 
   const handleFocus = () => {
     setIsFocused(true)
@@ -55,7 +56,7 @@ function TextField<TFieldValues extends FieldValues>({
       <input
         {...formProps}
         className={clsx(styles.textField, {
-          [styles.error]: hasError,
+          [styles.error]: hasError || hasRootError,
         })}
         aria-invalid={hasError ? 'true' : 'false'}
         aria-describedby={hasError ? `${name}-error` : undefined}

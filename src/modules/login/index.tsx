@@ -8,14 +8,22 @@ import { useAuth } from '@/providers/AuthProvider'
 import { loginSchema, type LoginSchema } from '@/server/auth/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import z from 'zod'
 import styles from './Login.module.scss'
 
-function Login() {
-  const { login, error, isExecuting } = useAuth()
+const loginFormSchema = loginSchema.extend({
+  rootError: z.string().optional(),
+})
 
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+type LoginFormSchema = z.infer<typeof loginFormSchema>
+
+function Login() {
+  const { login, error: loginError, isExecuting } = useAuth()
+
+  const form = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -28,12 +36,19 @@ function Login() {
     login(data)
   }
 
+  useEffect(() => {
+    if (loginError) {
+      form.setError('rootError', { message: loginError, type: 'server' })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginError, form.setError])
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginHeader}>
         <h1>Sign in to Eventio.</h1>
-        {error ? (
-          <p className={styles.rootError}>{error}</p>
+        {loginError ? (
+          <p className={styles.rootError}>{loginError}</p>
         ) : (
           <p>Enter your details below.</p>
         )}
